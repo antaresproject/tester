@@ -18,8 +18,6 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Http\Handlers;
 
 use Antares\Contracts\Auth\Guard;

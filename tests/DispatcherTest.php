@@ -18,13 +18,11 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Tests;
 
-use Mockery as m;
 use Antares\Tester\Dispatcher as Stub;
 use Antares\Testing\TestCase;
+use Mockery as m;
 
 class DispatcherTest extends TestCase
 {

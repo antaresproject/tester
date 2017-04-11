@@ -18,13 +18,11 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Tests;
 
-use Mockery as m;
 use Antares\Tester\Factory as Stub;
 use Antares\Testing\TestCase;
+use Mockery as m;
 
 class FactoryTest extends TestCase
 {

@@ -18,8 +18,6 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Builder\Tests;
 
 use Antares\Tester\Builder\RoundRobin as Stub;
@@ -33,7 +31,7 @@ class RoundRobinTest extends TestCase
     {
         parent::setUp();
         $session              = m::mock('Illuminate\Session\SessionManager');
-        $session->shouldReceive('getToken')->withNoArgs()->andReturn(str_random(10));
+        $session->shouldReceive('token')->withNoArgs()->andReturn(str_random(10));
         $this->app['session'] = $session;
     }
 
@@ -59,7 +57,7 @@ class RoundRobinTest extends TestCase
     public function build()
     {
         $session              = m::mock('Illuminate\Session\SessionManager');
-        $session->shouldReceive('getToken')->withNoArgs()->andReturn(str_random(10));
+        $session->shouldReceive('token')->withNoArgs()->andReturn(str_random(10));
         $this->app['session'] = $session;
 
         $stub = new Stub;

@@ -18,8 +18,6 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Adapter\Tests;
 
 use Antares\Testing\TestCase;
@@ -39,7 +37,7 @@ class ExtractAdapterTest extends TestCase
         $config               = m::mock('\Illuminate\Contracts\Config\Repository');
         $config->shouldReceive('get')->with('antares/tester::container')->andReturn('test-container');
         $session              = m::mock('Illuminate\Session\SessionManager');
-        $session->shouldReceive('getToken')->withNoArgs()->andReturn(str_random(10));
+        $session->shouldReceive('token')->withNoArgs()->andReturn(str_random(10));
         $this->app['config']  = $config;
         $this->app['session'] = $session;
         $stub                 = new Stub();

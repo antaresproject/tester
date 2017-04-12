@@ -18,8 +18,6 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Adapter;
 
 use Antares\Tester\Contracts\Extractor;

@@ -18,27 +18,33 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Http\Presenters\Tests;
 
-use Mockery as m;
 use Antares\Tester\Http\Presenters\CollectivePresenter as Stub;
+use Antares\Tester\Http\Presenters\CollectivePresenter;
+use Antares\Tester\Http\Breadcrumb\Breadcrumb;
+use Antares\Contracts\Html\Form\Factory;
+use Antares\Tester\Builder\RoundRobin;
+use Antares\Tester\Memory\Handler;
+use Illuminate\Support\Fluent;
 use Antares\Testing\TestCase;
+use Antares\Memory\Provider;
+use Mockery as m;
 
 class CollectivePresenterTest extends TestCase
 {
 
     /**
-     * constructing
+     * Construct
      * 
      * @test
      */
     public function testConstruct()
     {
-        $roundRobin = m::mock('\Antares\Tester\Builder\RoundRobin');
-        $factory    = m::mock('\Antares\Contracts\Html\Form\Factory');
-        $this->assertInstanceOf('Antares\Tester\Http\Presenters\CollectivePresenter', new Stub($roundRobin, $factory));
+        $roundRobin = m::mock(RoundRobin::class);
+        $factory    = m::mock(Factory::class);
+        $breadcrumb = m::mock(Breadcrumb::class);
+        $this->assertInstanceOf(CollectivePresenter::class, new Stub($roundRobin, $factory, $breadcrumb));
     }
 
     /**
@@ -48,18 +54,18 @@ class CollectivePresenterTest extends TestCase
      */
     public function form()
     {
-        $roundRobin     = m::mock('\Antares\Tester\Builder\RoundRobin');
+        $roundRobin     = m::mock(RoundRobin::class);
         $roundRobin->shouldReceive('build')->withNoArgs()->once()->andReturnSelf();
-        $factory        = m::mock('\Antares\Contracts\Html\Form\Factory');
-        $factory2       = m::mock('\Antares\Contracts\Html\Form\Factory');
-        $fluent         = m::mock('\Illuminate\Support\Fluent');
+        $factory        = m::mock(Factory::class);
+        $factory2       = m::mock(Factory::class);
+        $fluent         = m::mock(Fluent::class);
         $factory2->grid = $fluent;
-        $factory->shouldReceive('of')
-                ->with(m::type('String'), m::type('Closure'))
-                ->andReturn($factory2);
+        $factory->shouldReceive('of')->with(m::type('String'), m::type('Closure'))->andReturn($factory2);
+        $breadcrumb     = m::mock(Breadcrumb::class);
+        $breadcrumb->shouldReceive('onForm')->withNoArgs()->once()->andReturnNull();
 
-        $stub     = new Stub($roundRobin, $factory);
-        $memory   = m::mock('\Antares\Tester\Memory\Handler');
+        $stub     = new Stub($roundRobin, $factory, $breadcrumb);
+        $memory   = m::mock(Handler::class);
         $active   = [
             'domains/dns' => [
                 'path'        => 'vendor::antares/modules/domains/dns',
@@ -77,7 +83,7 @@ class CollectivePresenterTest extends TestCase
                 ]
             ]
         ];
-        $provider = m::mock('Antares\Memory\Provider');
+        $provider = m::mock(Provider::class);
         $tests    = [
             'Rackspace Module Configuration Test' =>
             [
@@ -101,10 +107,11 @@ class CollectivePresenterTest extends TestCase
             ]
         ];
 
-        $provider->shouldReceive('all')->withNoArgs()->andReturn($tests);
-        $provider->shouldReceive('finish')->withNoArgs()->andReturn($tests);
-        $memory->shouldReceive('get')->with('extensions.active')->andReturn($active);
-        $memory->shouldReceive('make')->with('tests')->andReturn($provider);
+        $provider->shouldReceive('all')->withNoArgs()->andReturn($tests)
+                ->shouldReceive('finish')->withNoArgs()->andReturn($tests)
+                ->shouldReceive('forget')->with('Rackspace Module Configuration Test')->once()->andReturnNull();
+        $memory->shouldReceive('get')->with('extensions.active')->andReturn($active)
+                ->shouldReceive('make')->with('tests')->andReturn($provider);
 
         $this->app['antares.memory'] = $memory;
         $this->assertInstanceOf(get_class($factory2), $stub->form());

@@ -20,12 +20,24 @@
 
 namespace Antares\Tester\Adapter\Tests;
 
-use Antares\Testing\TestCase;
 use Antares\Tester\Adapter\ExtractAdapter as Stub;
+use Antares\Tester\TesterServiceProvider;
+use Antares\Testing\ApplicationTestCase;
+use Illuminate\Session\SessionManager;
 use Mockery as m;
+use Exception;
 
-class ExtractAdapterTest extends TestCase
+class ExtractAdapterTest extends ApplicationTestCase
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        $this->addProvider(TesterServiceProvider::class);
+        parent::setUp();
+    }
 
     /**
      * Test Antares\Tester\Adapter\ExtractAdapter::generateScripts() method.
@@ -34,15 +46,12 @@ class ExtractAdapterTest extends TestCase
      */
     public function testGenerateScripts()
     {
-        $config               = m::mock('\Illuminate\Contracts\Config\Repository');
-        $config->shouldReceive('get')->with('antares/tester::container')->andReturn('test-container');
-        $session              = m::mock('Illuminate\Session\SessionManager');
+        $session              = m::mock(SessionManager::class);
         $session->shouldReceive('token')->withNoArgs()->andReturn(str_random(10));
-        $this->app['config']  = $config;
         $this->app['session'] = $session;
         $stub                 = new Stub();
         $this->assertNull($stub->generateScripts(['id' => 'test-form']));
-        $this->assertTrue(str_contains(app('antares.asset')->container('test-container')->inline(), 'text/javascript'));
+        $this->assertTrue(str_contains(app('antares.asset')->container($this->app->make('config')->get('antares/tester::container'))->inline(), 'text/javascript'));
     }
 
     /**
@@ -55,8 +64,8 @@ class ExtractAdapterTest extends TestCase
         $stub = new Stub();
 
         try {
-            $stub->extractForm('Antares\Tester\Adapter\Tests\ExtractAdapterTest');
-        } catch (\Exception $e) {
+            $stub->extractForm(ExtractAdapterTest::class);
+        } catch (Exception $e) {
             $this->assertSame($e->getMessage(), 'Undefined offset: 1');
             $this->assertEquals(0, $e->getCode());
         }

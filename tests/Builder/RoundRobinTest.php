@@ -21,8 +21,9 @@
 namespace Antares\Tester\Builder\Tests;
 
 use Antares\Tester\Builder\RoundRobin as Stub;
-use Mockery as m;
+use Illuminate\Session\SessionManager;
 use Antares\Testing\TestCase;
+use Mockery as m;
 
 class RoundRobinTest extends TestCase
 {
@@ -30,7 +31,7 @@ class RoundRobinTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $session              = m::mock('Illuminate\Session\SessionManager');
+        $session              = m::mock(SessionManager::class);
         $session->shouldReceive('token')->withNoArgs()->andReturn(str_random(10));
         $this->app['session'] = $session;
     }
@@ -56,7 +57,7 @@ class RoundRobinTest extends TestCase
      */
     public function build()
     {
-        $session              = m::mock('Illuminate\Session\SessionManager');
+        $session              = m::mock(SessionManager::class);
         $session->shouldReceive('token')->withNoArgs()->andReturn(str_random(10));
         $this->app['session'] = $session;
 

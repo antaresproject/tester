@@ -18,8 +18,6 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Builder;
 
 use Antares\Tester\Contracts\Extractor;
@@ -108,13 +106,13 @@ class Generator extends Builder implements BuilderContract
         if ($callback instanceof Closure) {
             call_user_func($callback, $field);
         }
+
         $params  = $this->attributes($field);
         $this->extractor->generateScripts($params);
         $this->memorize($field);
         $hiddens = [
             app('form')->hidden('validator', $attributes['validator'])
         ];
-
 
         return view($this->config['view'], ['hiddens' => $hiddens, 'element' => app('form')->button($attributes['title'], $params)])->render();
     }

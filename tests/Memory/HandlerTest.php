@@ -18,14 +18,16 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Memory\Tests;
 
-use Mockery as m;
-use Illuminate\Support\Fluent;
 use Antares\Tester\Memory\Handler as Stub;
+use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Container\Container;
+use Antares\Tester\Memory\Handler;
+use Illuminate\Support\Fluent;
 use Antares\Testing\TestCase;
+use Mockery as m;
 
 class HandlerTest extends TestCase
 {
@@ -50,8 +52,8 @@ class HandlerTest extends TestCase
      */
     public function testInitiateMethod()
     {
-        $app      = m::mock('\Illuminate\Container\Container');
-        $cache    = m::mock('\Illuminate\Contracts\Cache\Repository');
+        $app      = m::mock(Container::class);
+        $cache    = m::mock(Repository::class);
         $eloquent = m::mock('EloquentHandlerModelMock');
 
         $config = ['model' => 'EloquentHandlerModelMock', 'cache' => true];
@@ -82,7 +84,7 @@ class HandlerTest extends TestCase
                 'id'   => 2
             ],
         ];
-        $this->assertInstanceOf('\Antares\Tester\Memory\Handler', $stub);
+        $this->assertInstanceOf(Handler::class, $stub);
         $this->assertEquals($expected, $stub->initiate());
     }
 
@@ -93,15 +95,15 @@ class HandlerTest extends TestCase
      */
     public function testFinishMethod()
     {
-        $app      = m::mock('\Illuminate\Container\Container');
-        $cache    = m::mock('\Illuminate\Contracts\Cache\Repository');
+        $app      = m::mock(Container::class);
+        $cache    = m::mock(Repository::class);
         $eloquent = m::mock('EloquentHandlerModelMock');
 
         $config = ['model' => $eloquent, 'cache' => true];
         $data   = $this->eloquentDataProvider();
 
-        $checkWithCountQuery    = m::mock('\Illuminate\Database\Query\Builder');
-        $checkWithoutCountQuery = m::mock('\Illuminate\Database\Query\Builder');
+        $checkWithCountQuery    = m::mock(Builder::class);
+        $checkWithoutCountQuery = m::mock(Builder::class);
         $fooEntity              = m::mock('FooEntityMock');
 
         $app->shouldReceive('make')->with('EloquentHandlerModelMock')->andReturn($eloquent);

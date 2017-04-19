@@ -18,19 +18,23 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Builder\Tests;
 
 use Antares\Tester\Builder\Generator as Stub;
+use Antares\Tester\Contracts\ClassValidator;
+use Antares\Contracts\Extension\Dispatcher;
+use Antares\Tester\TesterServiceProvider;
+use Antares\Testing\ApplicationTestCase;
+use Antares\Tester\Contracts\Extractor;
+use Illuminate\Contracts\View\Factory;
+use Antares\Tester\Builder\Generator;
 use Mockery as m;
-use Antares\Testing\TestCase;
 
-class GeneratorTest extends TestCase
+class GeneratorTest extends ApplicationTestCase
 {
 
     /**
-     * @var \Antares\Tester\Builder\Generator 
+     * @var Generator 
      */
     protected $stub;
 
@@ -39,17 +43,8 @@ class GeneratorTest extends TestCase
      */
     public function setUp()
     {
+        $this->addProvider(TesterServiceProvider::class);
         parent::setUp();
-        $repository          = m::mock('\Illuminate\Contracts\Config\Repository');
-        $repository->shouldReceive('get')->with('antares/tester::config')->andReturn([
-            'memory'    => [
-                'model' => '\Antares\Tester\Model\MemoryTests'
-            ],
-            'view'      => 'antares/tester::admin.partials._button',
-            'container' => 'antares/foundation::scripts',
-            'inputId'   => 'tester-button',
-        ]);
-        $this->app['config'] = $repository;
     }
 
     /**
@@ -59,8 +54,8 @@ class GeneratorTest extends TestCase
      */
     public function testConstruct()
     {
-        $stub = new Stub(m::mock('\Antares\Tester\Contracts\Extractor'), m::mock('\Antares\Tester\Contracts\ClassValidator'));
-        $this->assertInstanceOf('Antares\Tester\Builder\Generator', $stub);
+        $stub = new Stub(m::mock(Extractor::class), m::mock(ClassValidator::class));
+        $this->assertInstanceOf(Generator::class, $stub);
     }
 
     /**
@@ -70,9 +65,9 @@ class GeneratorTest extends TestCase
      */
     public function testBuild()
     {
-        $extractor                                      = m::mock('\Antares\Tester\Contracts\Extractor');
-        $validator                                      = m::mock('\Antares\Tester\Contracts\ClassValidator');
-        $attributes                                     = [
+        $extractor                      = m::mock(Extractor::class);
+        $validator                      = m::mock(ClassValidator::class);
+        $attributes                     = [
             'id'        => 'foo',
             'validator' => 'TestValidator',
             'title'     => 'Test Function'
@@ -81,12 +76,14 @@ class GeneratorTest extends TestCase
                 ->withAnyArgs()
                 ->andReturnSelf();
         $validator->shouldReceive('isValid')->with($attributes)->andReturn(true);
-        $stub                                           = new Stub($extractor, $validator);
-        $view                                           = m::mock('Illuminate\Contracts\View\Factory');
-        $expects                                        = 'result';
+        $stub                           = new Stub($extractor, $validator);
+        $view                           = m::mock(Factory::class);
+        $expects                        = 'result';
         $view->shouldReceive('render')->withAnyArgs()->andReturn($expects);
         $view->shouldReceive('make')->withAnyArgs()->andReturnSelf();
-        $this->app['Illuminate\Contracts\View\Factory'] = $view;
+        $this->app[Factory::class]      = $view;
+        $this->app['antares.extension'] = $extension                      = m::mock(Dispatcher::class);
+        $extension->shouldReceive('isActive')->with('tester')->andReturn(true);
         $this->assertSame($stub->build('foo', $attributes), $expects);
     }
 

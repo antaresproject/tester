@@ -18,13 +18,12 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Validator\Tests;
 
-use Mockery as m;
 use Antares\Tester\Validator\ClassValidator as Stub;
+use Antares\Tester\Contracts\Tester;
 use Antares\Testing\TestCase;
+use Mockery as m;
 
 class ClassValidatorTest extends TestCase
 {
@@ -34,7 +33,7 @@ class ClassValidatorTest extends TestCase
      */
     public function testIsValid()
     {
-        $validator  = m::mock('\Antares\Tester\Contracts\Tester');
+        $validator  = m::mock(Tester::class);
         $validator->shouldReceive('__invoke')->withAnyArgs()->andReturnSelf();
         $attributes = [
             'validator' => $validator

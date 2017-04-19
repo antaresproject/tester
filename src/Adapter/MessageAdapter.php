@@ -18,8 +18,6 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Adapter;
 
 class MessageAdapter
@@ -57,7 +55,7 @@ class MessageAdapter
      */
     public function __construct()
     {
-        $this->config = config('antares/tester::codes.errors') + config('tester.codes.errors', []);
+        $this->config = config('antares/tester::codes.errors', []) + config('tester.codes.errors', []);
     }
 
     /**

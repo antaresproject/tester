@@ -18,24 +18,19 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Http\Presenters;
 
-use Antares\Contracts\Html\Form\Factory;
 use Antares\Contracts\Html\Form\Factory as FormFactory;
-use Antares\Contracts\Html\Form\Fieldset;
 use Antares\Contracts\Html\Form\Grid as FormGrid;
 use Antares\Foundation\Http\Presenters\Presenter;
-use Antares\Tester\Contracts\Builder;
 use Antares\Tester\Http\Breadcrumb\Breadcrumb;
+use Antares\Contracts\Html\Form\Fieldset;
+use Antares\Contracts\Html\Form\Factory;
+use Antares\Tester\Contracts\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Fluent;
 use ReflectionClass;
 use Exception;
-use function app;
-use function trans;
-use function view;
 
 class CollectivePresenter extends Presenter
 {

@@ -18,15 +18,22 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Processor\Tests;
 
-use Mockery as m;
+use Antares\Tester\Http\Controllers\Admin\CollectiveController;
+use Antares\Tester\Http\Presenters\CollectivePresenter;
 use Antares\Tester\Processor\CollectiveProcessor as Stub;
-use Antares\Tester\Contracts\Tester;
+use Antares\Tester\Processor\CollectiveProcessor;
 use Antares\Tester\Adapter\ResponseAdapter;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Filesystem\Filesystem;
+use Antares\Tester\Contracts\Tester;
+use Antares\Tester\Memory\Handler;
+use Antares\Html\Form\FormBuilder;
 use Antares\Testing\TestCase;
+use Antares\Memory\Provider;
+use Illuminate\View\View;
+use Mockery as m;
 
 class CollectiveProcessorTest extends TestCase
 {
@@ -42,9 +49,7 @@ class CollectiveProcessorTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $presenter = m::mock('\Antares\Tester\Http\Presenters\CollectivePresenter');
-
-
+        $presenter  = m::mock(CollectivePresenter::class);
         $this->stub = new Stub($presenter);
     }
 
@@ -55,7 +60,7 @@ class CollectiveProcessorTest extends TestCase
      */
     public function testConstruct()
     {
-        $this->assertSame(get_class($this->stub), 'Antares\Tester\Processor\CollectiveProcessor');
+        $this->assertSame(get_class($this->stub), CollectiveProcessor::class);
     }
 
     /**
@@ -65,15 +70,15 @@ class CollectiveProcessorTest extends TestCase
      */
     public function testIndex()
     {
-        $facade      = m::mock('\Antares\Tester\Facade\ModuleFacade');
-        $presenter   = m::mock('\Antares\Tester\Http\Presenters\CollectivePresenter');
-        $filesystem  = m::mock('\Illuminate\Filesystem\Filesystem');
-        $formBuilder = m::mock('\Antares\Html\Form\FormBuilder');
+        $facade      = m::mock(\Antares\Tester\Facade\ModuleFacade::class);
+        $presenter   = m::mock(CollectivePresenter::class);
+        $filesystem  = m::mock(Filesystem::class);
+        $formBuilder = m::mock(FormBuilder::class);
         $presenter->shouldReceive('form')->withAnyArgs()->andReturn($formBuilder);
 
         $stub       = new Stub($presenter, $filesystem, $facade);
-        $controller = m::mock('Antares\Tester\Http\Controllers\Admin\CollectiveController');
-        $view       = m::mock('Illuminate\View\View');
+        $controller = m::mock(CollectiveController::class);
+        $view       = m::mock(View::class);
         $controller->shouldReceive('show')->with(m::type('array'))->andReturn($view);
 
         $this->assertInstanceOf(get_class($view), $stub->index($controller));
@@ -89,7 +94,7 @@ class CollectiveProcessorTest extends TestCase
         $data     = $this->stub->prepare([])->getData();
         $this->assertTrue(isset($data[0]->error));
         $this->assertSame("Unable to start tests. No module has been selected.", $data[0]->error);
-        $memory   = m::mock('\Antares\Tester\Memory\Handler');
+        $memory   = m::mock(Handler::class);
         $active   = [
             'domains/dns' => [
                 'path'        => 'vendor::antares/modules/domains/dns',
@@ -107,7 +112,7 @@ class CollectiveProcessorTest extends TestCase
                 ]
             ]
         ];
-        $provider = m::mock('Antares\Memory\Provider');
+        $provider = m::mock(Provider::class);
         $tests    = [
             'Rackspace Module Configuration Test' =>
             [
@@ -151,15 +156,15 @@ class CollectiveProcessorTest extends TestCase
      */
     public function testRun()
     {
-        $presenter = m::mock('\Antares\Tester\Http\Presenters\CollectivePresenter');
+        $presenter = m::mock(CollectivePresenter::class);
         $stub      = new Stub($presenter);
 
-        $listener = m::mock('Antares\Tester\Http\Controllers\Admin\CollectiveController');
-        $listener->shouldReceive('render')->with(m::type('Illuminate\View\View'))->andReturn(true);
-        $view     = m::mock('Illuminate\View\View');
+        $listener = m::mock(CollectiveController::class);
+        $listener->shouldReceive('render')->with(m::type(View::class))->andReturn(true);
+        $view     = m::mock(View::class);
         $listener->shouldReceive('show')->with(m::type('array'))->andReturn($view);
 
-        $viewFactory                                    = m::mock('Illuminate\View\View');
+        $viewFactory               = m::mock('Illuminate\View\View');
         $viewFactory
                 ->shouldReceive('with')
                 ->withAnyArgs()
@@ -169,7 +174,7 @@ class CollectiveProcessorTest extends TestCase
                 ->with('antares/tester::admin.partials._error', [], [])
                 ->once()
                 ->andReturnSelf();
-        $this->app['Illuminate\Contracts\View\Factory'] = $viewFactory;
+        $this->app[Factory::class] = $viewFactory;
         $this->assertTrue($stub->run($listener, [
                     'validator' => __NAMESPACE__ . '\\Foo'
         ]));

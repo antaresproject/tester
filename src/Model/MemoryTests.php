@@ -18,17 +18,12 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Antares\Search\Traits\SearchTrait;
 
 class MemoryTests extends Model
 {
-
-    use SearchTrait;
 
     /**
      * @var String

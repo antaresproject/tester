@@ -1,11 +1,33 @@
-# Change Log
+# Changelog
 
-This project follows [Semantic Versioning](CONTRIBUTING.md).
+### [0.9.2]
 
-## Proposals
+##### New
 
-We do not give estimated times for completion on `Accepted` Proposals.
+* New composer.json structure.
+* New composer.json structure.
+* Refactoring unit tests.
+* Laravel 5.4 integration.
 
----
+##### Changes
 
-#INITIAL ANTARES RELEASE
+* Readme.md structure change.
+* Added homepage and friendly names to components.
+* Updated ACL file.
+* Quick search engine based on datatables results.
+* Tester unit tests refactoring.
+
+##### Fixes
+
+* Getting component model.
+
+##### Other
+
+* Update composer.json.
+* Update composer.json.
+* Fix for new composer handler.
+* Changed project name on composer.
+* INITIAL ANTARES COMMIT.
+* Initial commit.
+
+

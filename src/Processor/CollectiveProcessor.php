@@ -18,8 +18,6 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Processor;
 
 use Antares\Foundation\Processor\Processor;

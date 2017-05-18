@@ -1,4 +1,4 @@
-# Antares Tester Component
+# Antares Tester Module
 
 [![Laravel 5.4](https://img.shields.io/badge/Laravel-5.4-orange.svg)](http://laravel.com)
 [![Coverage Status](https://coveralls.io/repos/github/antaresproject/project/badge.svg?branch=master)](https://coveralls.io/github/antaresproject/project?branch=master)
@@ -9,9 +9,13 @@
 [![GitHub stars](https://img.shields.io/github/stars/antaresproject/project.svg)](https://github.com/antaresproject/project/stargazers)
 [![GitHub license](https://img.shields.io/badge/license-New%20BSD-blue.svg)](https://raw.githubusercontent.com/antaresproject/project/master/LICENSE)
 
+![tester](docs/img/tester.PNG)
+
+Tester is module which provides tools to verify(test) configuration in various sections.
+
 ## Documentation
 
-Antares Tester Component documentation is not finished yet.
+Antares Tester Module documentation is not finished yet.
 
 Full Antares documentation can be found at [antaresproject.io/docs](http://antaresproject.io/docs).
 

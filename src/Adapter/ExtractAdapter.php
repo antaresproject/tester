@@ -85,7 +85,7 @@ CBALL;
         }
         $this->extractHiddens($controls, $form->hiddens);
 
-        $name           = $this->extractModuleName($traced);
+        $name = $this->extractModuleName($traced);
         $name = str_replace('_', '-', $name);
         $name = str_replace('components/', 'antaresproject/component-', $name);
 
@@ -93,8 +93,8 @@ CBALL;
         if (is_null($memory)) {
             $memory = ['fullname' => 'core'];
         }
+        $component = Component::findOneByName($memory['fullname']);
 
-        $component  = Component::findOneByName($memory['fullname']);
 
         $attributes = [
             'component_id' => $component->id,

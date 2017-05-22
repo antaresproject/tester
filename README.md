@@ -9,9 +9,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/antaresproject/project.svg)](https://github.com/antaresproject/project/stargazers)
 [![GitHub license](https://img.shields.io/badge/license-New%20BSD-blue.svg)](https://raw.githubusercontent.com/antaresproject/project/master/LICENSE)
 
-![tester](docs/img/tester.PNG)
-
 Tester is module which provides tools to verify(test) configuration in various sections.
+
+![tester](docs/img/tester.PNG)
 
 ## Documentation
 

@@ -1,6 +1,6 @@
 {
     "name": "antaresproject/component-tester",
-    "description": "Module Configuration Tester Component verifies and validates the configuration of modules",
+    "description": "Tester is module which provides tools to verify(test) configuration in various sections.",
     "type": "antaresproject-component",
     "version": "0.9.2.1",
     "homepage": "https://github.com/antaresproject/tester",

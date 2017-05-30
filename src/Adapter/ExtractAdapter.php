@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,14 +14,13 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Adapter;
 
+use Antares\Model\Component;
 use Antares\Tester\Contracts\Extractor;
 use Illuminate\Support\Fluent;
 use ReflectionClass;
@@ -86,12 +85,17 @@ CBALL;
         }
         $this->extractHiddens($controls, $form->hiddens);
 
-        $name   = $this->extractModuleName($traced);
+        $name = $this->extractModuleName($traced);
+        $name = str_replace('_', '-', $name);
+        $name = str_replace('components/', 'antaresproject/component-', $name);
+
         $memory = app('antares.memory')->get("extensions.active.{$name}");
         if (is_null($memory)) {
-            $memory = ['name' => 'acl_antares'];
+            $memory = ['fullname' => 'core'];
         }
-        $component  = app('antares.component')->where(['name' => $memory['name']])->firstOrFail();
+        $component = Component::findOneByName($memory['fullname']);
+
+
         $attributes = [
             'component_id' => $component->id,
             'component'    => $name,

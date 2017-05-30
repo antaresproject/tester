@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,25 +14,20 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Http\Handlers\Tests;
 
-use Mockery as m;
-use Antares\Tester\Http\Handlers\TesterMenuHandler as Stub;
+use Antares\Tester\Http\Handlers\TesterMenu as Stub;
+use Antares\Contracts\Auth\Guard;
+use Antares\Auth\SessionGuard;
 use Antares\Testing\TestCase;
+use Mockery as m;
 
 class TesterMenuHandlerTest extends TestCase
 {
-
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
 
     /**
      * Check whether the menu should be displayed.
@@ -41,9 +36,13 @@ class TesterMenuHandlerTest extends TestCase
      */
     public function testAuthorize()
     {
-        $stub      = new Stub($this->app);
-        $guardMock = m::mock('Antares\Contracts\Auth\Guard');
+        $this->app['antares.acl'] = $acl                      = m::mock(SessionGuard::class);
+        $acl->shouldReceive('make')->with('antares/tester')->once()->andReturnSelf()
+                ->shouldReceive('can')->with('tools-tester')->once()->andReturn(true);
+        $stub                     = new Stub($this->app);
+        $guardMock                = m::mock(Guard::class);
         $guardMock->shouldReceive('guest')->andReturn(false);
+
         $this->assertTrue($stub->authorize($guardMock));
     }
 
@@ -54,8 +53,8 @@ class TesterMenuHandlerTest extends TestCase
      */
     public function testHandle()
     {
-        $stub                                      = new Stub($this->app);
-        $this->app['Antares\Contracts\Auth\Guard'] = $guard                                     = m::mock('Antares\Contracts\Auth\Guard');
+        $stub                    = new Stub($this->app);
+        $this->app[Guard::class] = $guard                   = m::mock(Guard::class);
         $guard->shouldReceive('guest')->andReturn(false);
         $this->assertNull($stub->handle());
     }

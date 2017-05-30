@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,21 +14,16 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
-
-
 
 namespace Antares\Tester\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Antares\Search\Traits\SearchTrait;
 
 class MemoryTests extends Model
 {
-
-    use SearchTrait;
 
     /**
      * @var String

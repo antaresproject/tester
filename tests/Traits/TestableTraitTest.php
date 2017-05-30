@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,17 +14,16 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Traits\Tests;
 
-use Mockery as m;
-use Antares\Testing\TestCase;
 use Antares\Tester\Traits\TestableTrait;
+use Antares\Html\Support\FormBuilder;
+use Antares\Testing\TestCase;
+use Mockery as m;
 
 class TestableTraitTest extends TestCase
 {
@@ -32,12 +31,14 @@ class TestableTraitTest extends TestCase
     use TestableTrait;
 
     /**
-     * test add button method
+     * Test add button method
+     * 
+     * @test
      */
     public function testAddTestButton()
     {
-        $formBuilder        = m::mock('\Antares\Html\Support\FormBuilder');
-        $formBuilder->shouldReceive('tester')->with('test-button', ['executor' => get_class($this)], null)->andReturn(true);
+        $formBuilder        = m::mock(FormBuilder::class);
+        $formBuilder->shouldReceive('tester')->with('test-button', m::type('array'), null)->andReturn(true);
         $attributes['form'] = $formBuilder;
         $this->assertNull($this->addTestButton('test-button', $attributes));
     }

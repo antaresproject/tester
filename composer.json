@@ -1,6 +1,9 @@
 {
     "name": "antaresproject/component-tester",
-    "description": "Antares Tester Component",
+    "description": "Tester is module which provides tools to verify(test) configuration in various sections.",
+    "type": "antaresproject-component",
+    "version": "0.9.2.1",
+    "homepage": "https://github.com/antaresproject/tester",
     "authors": [
         {
             "name": "Łukasz Cirut",
@@ -8,6 +11,15 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9"
+        "antaresproject/component-installer-plugin": "*",
+        "php": ">=7.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Antares\\Tester\\": "src/"
+        }
+    },
+    "extra": {
+        "friendly-name": "Tester"
     }
 }

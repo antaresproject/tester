@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,17 +14,16 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Validator\Tests;
 
-use Mockery as m;
 use Antares\Tester\Validator\ClassValidator as Stub;
+use Antares\Tester\Contracts\Tester;
 use Antares\Testing\TestCase;
+use Mockery as m;
 
 class ClassValidatorTest extends TestCase
 {
@@ -34,7 +33,7 @@ class ClassValidatorTest extends TestCase
      */
     public function testIsValid()
     {
-        $validator  = m::mock('\Antares\Tester\Contracts\Tester');
+        $validator  = m::mock(Tester::class);
         $validator->shouldReceive('__invoke')->withAnyArgs()->andReturnSelf();
         $attributes = [
             'validator' => $validator

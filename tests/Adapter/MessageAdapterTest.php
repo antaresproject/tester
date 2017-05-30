@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,19 +14,17 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
-
-
 
 namespace Antares\Tester\Adapter\Tests;
 
 use Antares\Tester\Adapter\MessageAdapter as Stub;
+use Antares\Testing\ApplicationTestCase;
 use Mockery as m;
-use Antares\Testing\TestCase;
 
-class MessageAdapterTest extends TestCase
+class MessageAdapterTest extends ApplicationTestCase
 {
 
     /**
@@ -38,7 +36,8 @@ class MessageAdapterTest extends TestCase
         $repository          = m::mock('\Illuminate\Contracts\Config\Repository');
         $config              = require(__DIR__ . '/../fixtures/codes.php');
         $errors              = $config['errors'];
-        $repository->shouldReceive('get')->with('antares/tester::codes.errors')->andReturn($errors);
+        $repository->shouldReceive('get')->with('antares/tester::codes.errors', [])->andReturn($errors)
+                ->shouldReceive('get')->with("tester.codes.errors", [])->andReturn([]);
         $this->app['config'] = $repository;
     }
 

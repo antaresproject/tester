@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,76 +14,62 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Tests;
 
-use Mockery as m;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Antares\Tester\TesterServiceProvider as Stub;
-use Illuminate\Support\Facades\App;
-use Antares\Testing\TestCase;
+use Antares\Testing\ApplicationTestCase;
+use Mockery as m;
 
-class TesterServiceProviderTest extends TestCase
+class TesterServiceProviderTest extends ApplicationTestCase
 {
 
+    use WithoutMiddleware;
+
     /**
-     * test checks whether regster method binds valid elements
+     * Setup the test environment.
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->disableMiddlewareForAllTests();
+    }
+
+    /**
+     * Test checks whether regster method binds valid elements
      * 
      * @test
      */
     public function testRegisterMethod()
     {
 
-        $app = $this->app;
-
-        $presenter = m::mock('\Antares\Foundation\Http\Presenters\Extension');
-        $validator = m::mock('\Antares\Foundation\Validation\Extension');
-
-        App::instance('Antares\Foundation\Http\Presenters\Extension', $presenter);
-        App::instance('Antares\Foundation\Validation\Extension', $validator);
-
-        $app['config'] = $config        = m::mock('\Illuminate\Contracts\Config\Repository');
-
+        $app           = $this->app;
         $app['events'] = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $app['files']  = m::mock('\Illuminate\Filesystem\Filesystem');
-
-        $stub = new Stub($app);
-        $stub->register();
+        $stub          = new Stub($app);
+        $this->assertNull($stub->register());
         $this->assertInstanceOf('\Antares\Tester\Factory', app('antares.tester'));
     }
 
     /**
-     * Test TesterServiceProvider::boot() method.
+     * Test TesterServiceProvider::bootExtensionComponents() method.
      *
      * @test
      */
-    public function testThrowExceptionWhenBootMethodAndInvalidMock()
+    public function testBootExtensionComponents()
     {
 
-        $path              = realpath(__DIR__ . '/../');
-        $app               = [
-            'router' => $router  = m::mock('\Illuminate\Routing\Router'),
-        ];
-        $app['view.paths'] = array($path);
-        $config            = m::mock('\Antares\Config\Repository');
-        $config->shouldReceive('package')->with('antares/tester', "{$path}/resources/config", 'antares/tester')->andReturnNull();
-
-
-        $config->shouldReceive('offsetGet')
-                ->andReturnUsing(function ($c) {
-                    array(realpath(__DIR__ . '/../'));
-                });
-        $app['config'] = $config;
+        $app           = $this->app;
+        $app['events'] = m::mock('\Illuminate\Contracts\Events\Dispatcher');
+        $app['files']  = $files         = m::mock('\Illuminate\Filesystem\Filesystem');
+        $files->shouldReceive('isDirectory')->with(m::type('string'))->andReturn(false);
         $stub          = new Stub($app);
-        try {
-            $stub->boot();
-        } catch (\Exception $e) {
-            $this->assertTrue(strpos($e->getMessage(), "antares.acl") !== false);
-        }
+        $stub->register();
+        $this->assertNull($stub->bootExtensionComponents());
     }
 
 }

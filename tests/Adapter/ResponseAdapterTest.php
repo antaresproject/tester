@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,19 +14,17 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
-
-
 
 namespace Antares\Tester\Adapter\Tests;
 
 use Antares\Tester\Adapter\ResponseAdapter as Stub;
+use Antares\Testing\ApplicationTestCase;
 use Mockery as m;
-use Antares\Testing\TestCase;
 
-class ResponseAdapterTest extends TestCase
+class ResponseAdapterTest extends ApplicationTestCase
 {
 
     protected static $config = [
@@ -41,13 +39,14 @@ class ResponseAdapterTest extends TestCase
     ];
 
     /**
-     * @inherits
+     * {@inheritdoc}
      */
     public function setUp()
     {
         parent::setUp();
         $repository          = m::mock('\Illuminate\Contracts\Config\Repository');
-        $repository->shouldReceive('get')->with('antares/tester::codes.errors')->andReturn(self::$config);
+        $repository->shouldReceive('get')->with('antares/tester::codes.errors', [])->andReturn(self::$config)
+                ->shouldReceive('get')->with("tester.codes.errors", [])->andReturn([]);
         $this->app['config'] = $repository;
     }
 

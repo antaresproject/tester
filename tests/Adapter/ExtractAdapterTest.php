@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,20 +14,30 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Adapter\Tests;
 
-use Antares\Testing\TestCase;
 use Antares\Tester\Adapter\ExtractAdapter as Stub;
+use Antares\Tester\TesterServiceProvider;
+use Antares\Testing\ApplicationTestCase;
+use Illuminate\Session\SessionManager;
 use Mockery as m;
+use Exception;
 
-class ExtractAdapterTest extends TestCase
+class ExtractAdapterTest extends ApplicationTestCase
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        $this->addProvider(TesterServiceProvider::class);
+        parent::setUp();
+    }
 
     /**
      * Test Antares\Tester\Adapter\ExtractAdapter::generateScripts() method.
@@ -36,15 +46,12 @@ class ExtractAdapterTest extends TestCase
      */
     public function testGenerateScripts()
     {
-        $config               = m::mock('\Illuminate\Contracts\Config\Repository');
-        $config->shouldReceive('get')->with('antares/tester::container')->andReturn('test-container');
-        $session              = m::mock('Illuminate\Session\SessionManager');
-        $session->shouldReceive('getToken')->withNoArgs()->andReturn(str_random(10));
-        $this->app['config']  = $config;
+        $session              = m::mock(SessionManager::class);
+        $session->shouldReceive('token')->withNoArgs()->andReturn(str_random(10));
         $this->app['session'] = $session;
         $stub                 = new Stub();
         $this->assertNull($stub->generateScripts(['id' => 'test-form']));
-        $this->assertTrue(str_contains(app('antares.asset')->container('test-container')->inline(), 'text/javascript'));
+        $this->assertTrue(str_contains(app('antares.asset')->container($this->app->make('config')->get('antares/tester::container'))->inline(), 'text/javascript'));
     }
 
     /**
@@ -57,8 +64,8 @@ class ExtractAdapterTest extends TestCase
         $stub = new Stub();
 
         try {
-            $stub->extractForm('Antares\Tester\Adapter\Tests\ExtractAdapterTest');
-        } catch (\Exception $e) {
+            $stub->extractForm(ExtractAdapterTest::class);
+        } catch (Exception $e) {
             $this->assertSame($e->getMessage(), 'Undefined offset: 1');
             $this->assertEquals(0, $e->getCode());
         }

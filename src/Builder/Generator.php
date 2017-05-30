@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,11 +14,9 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
-
-
 
 namespace Antares\Tester\Builder;
 
@@ -108,13 +106,13 @@ class Generator extends Builder implements BuilderContract
         if ($callback instanceof Closure) {
             call_user_func($callback, $field);
         }
+
         $params  = $this->attributes($field);
         $this->extractor->generateScripts($params);
         $this->memorize($field);
         $hiddens = [
             app('form')->hidden('validator', $attributes['validator'])
         ];
-
 
         return view($this->config['view'], ['hiddens' => $hiddens, 'element' => app('form')->button($attributes['title'], $params)])->render();
     }

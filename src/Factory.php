@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,13 +14,9 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
-
-
-
-
 
 namespace Antares\Tester;
 
@@ -33,22 +29,22 @@ class Factory
     /**
      * Dispatcher instance.
      *
-     * @var \Antares\Widgets\Dispatcher
+     * @var Dispatcher
      */
     protected $dispatcher;
 
     /**
      * Response instance.
      *
-     * @var \Antares\Widgets\Response
+     * @var Response
      */
     protected $response;
 
     /**
      * Construct a new Widgets instance.
      *
-     * @param  \Antares\Widgets\Dispatcher  $dispatcher
-     * @param  \Antares\Widgets\Response  $response
+     * @param  Dispatcher  $dispatcher
+     * @param  Response  $response
      */
     public function __construct(Dispatcher $dispatcher, Response $response)
     {

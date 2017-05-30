@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Antares Project package.
+ * Part of the Antares package.
  *
  * NOTICE OF LICENSE
  *
@@ -14,17 +14,23 @@
  * @version    0.9.0
  * @author     Antares Team
  * @license    BSD License (3-clause)
- * @copyright  (c) 2017, Antares Project
+ * @copyright  (c) 2017, Antares
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Http\Filters\Tests;
 
-use Mockery as m;
+use Antares\Contracts\Authorization\Authorization;
 use Antares\Tester\Http\Filters\CanManage as Stub;
+use Antares\Contracts\Authorization\Factory;
+use Antares\Contracts\Foundation\Foundation;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\Auth\Guard;
 use Antares\Testing\TestCase;
+use Illuminate\Routing\Route;
+use Illuminate\Http\Request;
+use Mockery as m;
 
 class CanManageTest extends TestCase
 {
@@ -37,16 +43,16 @@ class CanManageTest extends TestCase
     public function testFilter()
     {
 
-        $foundation = m::mock('\Antares\Contracts\Foundation\Foundation');
-        $auth       = m::mock('\Illuminate\Contracts\Auth\Guard');
-        $config     = m::mock('\Illuminate\Contracts\Config\Repository');
-        $acl        = m::mock('\Antares\Contracts\Authorization\Authorization');
-        $factory1   = m::mock('\Antares\Contracts\Authorization\Factory');
+        $foundation = m::mock(Foundation::class);
+        $auth       = m::mock(Guard::class);
+        $config     = m::mock(Repository::class);
+        $acl        = m::mock(Authorization::class);
+        $factory1   = m::mock(Factory::class);
         $factory1->shouldReceive('make')->andReturnSelf()
                 ->shouldReceive('can')->andReturn(false);
 
-        $route   = m::mock('\Illuminate\Routing\Route');
-        $request = m::mock('\Illuminate\Http\Request');
+        $route   = m::mock(Route::class);
+        $request = m::mock(Request::class);
 
         $foundation->shouldReceive('acl')->once()->andReturn($acl)
                 ->shouldReceive('handles')->once()->with('antares::login')->andReturn('http://localhost/admin/login');
@@ -55,9 +61,9 @@ class CanManageTest extends TestCase
         $config->shouldReceive('get')->once()->with('antares/foundation::routes.guest')->andReturn('antares::login');
 
         $stub1 = new Stub($foundation, $factory1);
-        $this->assertInstanceOf('\Illuminate\Http\RedirectResponse', $stub1->filter($route, $request, 'tools-tester'));
+        $this->assertInstanceOf(RedirectResponse::class, $stub1->filter($route, $request, 'tools-tester'));
 
-        $factory2 = m::mock('\Antares\Contracts\Authorization\Factory');
+        $factory2 = m::mock(Factory::class);
         $factory2->shouldReceive('make')
                 ->andReturnSelf()
                 ->shouldReceive('can')

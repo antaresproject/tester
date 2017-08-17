@@ -4,7 +4,9 @@
             <div class="alert alert--bg alert--glow alert--error alert--sm alert--border mb20">
                 <i class="alert__icon zmdi zmdi-alert-circle"></i>            
                 <div>
-                    <strong>Error code: {{ message.code }} ({{ message.descriptor }})</strong> 
+                    {% if message.code %}
+                        <strong>Error code: {{ message.code }} ({{ message.descriptor }})</strong> 
+                    {% endif %}
                     {% if message.domain is defined %} - {{ message.domain }}    {% endif %}
                     {{ message.message|raw }} 
                 </div>

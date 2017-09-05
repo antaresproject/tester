@@ -107,8 +107,10 @@ class Generator extends Builder implements BuilderContract
             call_user_func($callback, $field);
         }
 
-        $params  = $this->attributes($field);
-        $this->extractor->generateScripts($params);
+        $params = $this->attributes($field);
+        if (array_get($attributes, 'scripts', true)) {
+            $this->extractor->generateScripts($params);
+        }
         $this->memorize($field);
         $hiddens = [
             app('form')->hidden('validator', $attributes['validator'])

@@ -18,8 +18,6 @@
  * @link       http://antaresproject.io
  */
 
-
-
 namespace Antares\Tester\Traits;
 
 trait TestableTrait
@@ -32,6 +30,7 @@ trait TestableTrait
      */
     protected function addTestButton($name, array $attributes = [], $callback = null)
     {
+
         $form                   = $attributes['form'];
         $attributes['executor'] = get_class($this);
         $form->tester($name, $attributes, $callback);

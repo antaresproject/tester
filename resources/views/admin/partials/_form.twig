@@ -8,7 +8,7 @@
     {{ hidden|raw }}
 {% endfor %}    
 {% if fieldsets|length>0 %} 
-    <div class="col-16 text-right">
+    <div class="col-24 text-right">
         <div class="form-block">
             <label class="form-block__name">
                 {{ trans('Check/Uncheck All') }}
@@ -26,7 +26,7 @@
                 <legend>{{ fieldset.name }}</legend>
             {% endif %}         
             {% for control in fieldset.controls() %}                                    
-                <div class="col-16">
+                <div class="col-24">
                     {% include 'antares/foundation::layouts.antares.partials.form.vertical._'~control.type|replace({':': '_'}) with {control: control} %}
                 </div>                      
             {% endfor %}  

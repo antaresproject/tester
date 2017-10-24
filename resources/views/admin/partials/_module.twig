@@ -1,8 +1,8 @@
 {% for key, values in tests %}
-    <div class="col-16">
+    <div class="col-24">
         {{ key }}
     </div>
-    <div class="col-16">
+    <div class="col-24">
         {% for testname,params in values %}                
             <input  data-icheck="true"  type="checkbox" name="module[{{ params.id }}]"/>
             <span class="form-span--helper">{{ testname }}</span>

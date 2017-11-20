@@ -9,15 +9,15 @@
 {% endfor %}    
 {% if fieldsets|length>0 %} 
     <fieldset>
-        <legend></legend>
+        <legend>{{ trans('Module tester') }}</legend>
         <div class="form-block">
             <div class="col-group">
-                <div class="col-mb-4 col-3 col-dt-2 col-ld-2">
+                <div class="col-mb-10 col-3 col-dt-2 col-ld-2">
                     <label class="form-block__name">
                         {{ trans('Check/Uncheck All') }}
                     </label>
                 </div>
-                <div class="col-mb-16 col-18 col-dt-10 col-ld-4">
+                <div class="col-mb-14 col-18 col-dt-10 col-ld-4">
                     <div class="input-field input-field--short">
                         <input data-icheck="true" type="checkbox" class="test-checkboxes" />
                     </div>

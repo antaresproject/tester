@@ -1,18 +1,26 @@
 {% for key, values in tests %}
     <div class="col-group">
-        <div class="col-mb-8 col-6 col-dt-4 col-ld-3">
+        <div class="col-mb-10 col-6 col-dt-4 col-ld-3">
             {{ key }}
         </div>
 
         {% for testname,params in values %}                
             <div class="col-group">
-                <div class="pl10">
-                    <input  data-icheck="true"  type="checkbox" name="module[{{ params.id }}]"/>                
+                <div class="col-mb-14 col-6 col-dt-4 col-ld-3 nopadding">
+                    <div class="col-group">
+                        <div class="col-mb-24">
+                            <input  data-icheck="true"  type="checkbox" name="module[{{ params.id }}]"/>                
+
+                        </div>
+                        <div class="col-mb-24">
+                            <span class="form-span--helper">{{ testname }}</span>                
+
+                        </div>
+                    </div>
                 </div>
-                <div class="col-mb-8 col-6 col-dt-4 col-ld-3 nopadding">
-                    <span class="form-span--helper">{{ testname }}</span>                
-                </div>
+
             </div>
+
         {% endfor %}
     </div>
 {% endfor %}

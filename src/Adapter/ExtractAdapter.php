@@ -36,7 +36,14 @@ class ExtractAdapter implements Extractor
     public function generateScripts(array $params = null)
     {
         $cball = <<<CBALL
-(function(window,$){ 
+        ready('.test-results', function (element) {
+                window.requestAnimationFrame(() => {
+                    var scrollPosition = $(this).offset().top
+                    $('.app-content').scrollTop(scrollPosition)
+                    $('html').scrollTop(scrollPosition)
+                })
+        });
+   (function(window,$){ 
             $('body').on('click', '#%s', function () {
                 $('div.test-results').remove();
                 var form=$(this).parents('form:first');                
